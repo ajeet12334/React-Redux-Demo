@@ -1,11 +1,17 @@
-											Know React-Redux Step by Step
+Know React-Redux Step by Step
 
 1)Open VS Code
+
 2)Create folder
+
 3)npm install -g react-create-app (You can skip if did already)
+
 4)react-create-app react-redux-demo
+
 5)npm install redux --save 
+
 6)npm install react-redux --save 
+
 7)npm start (app will open in browser if all is well)
 
 8)Create Reducer file (reduce.js) 
