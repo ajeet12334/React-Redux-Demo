@@ -127,4 +127,4 @@ Know React-Redux Step by Step
 		//Step 5 : Connect the App component with globel store using connect method(Using Higher order function)
 		export default connect(mapStateToProps,mapDispachToProps)(App);
 
-													Thank You
+Thank You
