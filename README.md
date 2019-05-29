@@ -1,68 +1,124 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+											Know React-Redux Step by Step
 
-## Available Scripts
+1)Open VS Code
+2)Create folder
+3)npm install -g react-create-app (You can skip if did already)
+4)react-create-app react-redux-demo
+5)npm install redux --save 
+6)npm install react-redux --save 
+7)npm start (app will open in browser if all is well)
 
-In the project directory, you can run:
+8)Create Reducer file (reduce.js) 
+		
+		//Step 1
+		const initialState = {
+		   'age' : 20
+		};
 
-### `npm start`
+		//Step 2
+		const reducer = (state=initialState,action) => {
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+		   //Step 4
+		   const newState = {...state};
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+		   //Step 6
+		   if(action.type==='ADD'){
+			   newState.age++;
+		   }
+		   else if(action.type==='SUB'){
+			   newState.age--;
+		   }
 
-### `npm test`
+		   //Step 5
+		   return newState;
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+		}
 
-### `npm run build`
+		//Step 3
+		export default reducer;
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+9)Change index.js file (create store)
+		
+		import React from 'react';
+		import ReactDOM from 'react-dom';
+		import './index.css';
+		import App from './App';
+		import * as serviceWorker from './serviceWorker';
 
-### `npm run eject`
+		//Step 1
+		import { createStore } from 'redux'
+		import { Provider } from 'react-redux';
+		import reducer from './reducer';
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+		//Step 2
+		const store = createStore(reducer);
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+		//Step 3 : Wrap top component within Provider tag with store property
+		ReactDOM.render(<Provider store = {store}><App /></Provider>, document.getElementById('root'));
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+		serviceWorker.unregister();
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+10)Change app.js (Dispatch, Subscribe and connect)
+		
+		import React, {Component} from 'react';
+		import './App.css'
 
-## Learn More
+		//Step 4
+		import { connect } from 'react-redux';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+		class App extends Component {
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+		  // state = {
+		  //   'age' : 20
+		  // }
 
-### Code Splitting
+		  // buttonUpClick = () => {
+		  //   this.setState({
+		  //     ...this.state,
+		  //     'age':this.state.age+1
+		  //   })
+		  // }
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+		  // buttonDownClick = () => {
+		  //   this.setState({
+		  //     ...this.state,
+		  //     'age':this.state.age-1
+		  //   })
+		  // }
 
-### Analyzing the Bundle Size
+		  //Step 3 : Use all param and method using props
+		  render(){
+			return (
+			  <div className="App">
+				  <div> Age : <span> {this.props.age} </span></div>
+				  <button onClick={this.props.buttonUpClick}> Age Up </button>
+				  <button onClick={this.props.buttonDownClick}> Age Down </button>
+			  </div>
+			);
+		  }
+		}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+		//Step 1 : create mapDispachToProps function to dispach the action from component to reducer
+		const mapDispachToProps = (dispach) => {
+		  return {
+			buttonUpClick: () => dispach({type:'ADD'}),
+			buttonDownClick: () => dispach({type:'SUB'})
+		  }
+		}
 
-### Making a Progressive Web App
+		/** Step 2 : create mapStateToProps function to map the state 
+					 (get state from globel store automatically)
+					 with props
+		*/
+		const mapStateToProps = (state) => {
+		  return {
+			age : state.age
+		  }
+		}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+		//Step 5 : Connect the App component with globel store using connect method(Using Higher order function)
+		export default connect(mapStateToProps,mapDispachToProps)(App);
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+													Thank You
